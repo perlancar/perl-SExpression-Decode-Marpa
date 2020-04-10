@@ -181,21 +181,28 @@ EOF
         },
         do_string => sub {
             my $str0 = substr($_[1], 1, length($_[1])-2);
-            $str0 =~ s{\\(C-|^)([A-Za-z]) | \\([^C\^])}
+            # XXX support \x... and \... octal
+            $str0 =~ s{\\(C-|^)([A-Za-z]) | # 1 2 control
+                       \\x([0-91-f]{1,2}) | # 3 hex
+                       \\([0-7]{1,3})     | # 4 octal
+                       \\([^C\^])}          # 5 other single char
                       {
-                          if ($1) { chr(ord(lc $2) - 97+1) }
+                          if    (defined $1) { chr(ord(lc $2) - 97+1) }
+                          elsif (defined $3) { chr(hex $3) }
+                          elsif (defined $4) { chr(oct $4) }
                           else    {
-                              if    ($3 eq 'a') { return chr(7) }
-                              elsif ($3 eq 'b') { return chr(8) }
-                              elsif ($3 eq 't') { return chr(9) }
-                              elsif ($3 eq 'n') { return chr(10) }
-                              elsif ($3 eq 'v') { return chr(11) }
-                              elsif ($3 eq 'f') { return chr(12) }
-                              elsif ($3 eq 'r') { return chr(13) }
-                              elsif ($3 eq 'e') { return chr(27) }
-                              elsif ($3 eq 's') { return chr(32) }
-                              elsif ($3 eq 'd') { return chr(127) }
-                              else { $3 }
+                              my $c = $5;
+                              if    ($c eq 'a') { return chr(7) }
+                              elsif ($c eq 'b') { return chr(8) }
+                              elsif ($c eq 't') { return chr(9) }
+                              elsif ($c eq 'n') { return chr(10) }
+                              elsif ($c eq 'v') { return chr(11) }
+                              elsif ($c eq 'f') { return chr(12) }
+                              elsif ($c eq 'r') { return chr(13) }
+                              elsif ($c eq 'e') { return chr(27) }
+                              elsif ($c eq 's') { return chr(32) }
+                              elsif ($c eq 'd') { return chr(127) }
+                              else { $c }
                           }
                       }egx;
             $str0;
