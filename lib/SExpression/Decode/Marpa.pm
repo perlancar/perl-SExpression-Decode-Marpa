@@ -181,7 +181,7 @@ EOF
         },
         do_string => sub {
             my $str0 = substr($_[1], 1, length($_[1])-2);
-            # XXX support \x... and \... octal
+            # TODO support Unicode escape sequence \uNNNN or \U00NNNNNN
             $str0 =~ s{\\(C-|^)([A-Za-z]) | # 1 2 control
                        \\x([0-91-f]{1,2}) | # 3 hex
                        \\([0-7]{1,3})     | # 4 octal
