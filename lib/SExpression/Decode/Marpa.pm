@@ -251,8 +251,9 @@ Decode S-expresion in C<$str>. Dies on error.
 
 =head1 SEE ALSO
 
-L<Data::SExpression>, another S-expression parser based on L<Parse::Yapp>.
+Other S-expression parsers: L<Data::SExpression> (a parser based on
+L<Parse::Yapp>), L<SExpression::Decode::Regexp>.
 
-L<SExpression::Decode::Regexp>
+To dump as S-expression: L<Data::Dump::LispLike>, L<Data::Dump::SExpression>.
 
 =cut
